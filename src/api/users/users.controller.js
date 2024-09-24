@@ -4,16 +4,15 @@ import User from '../users/users.model.js';
 export const getUserById = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await usersService.getUserById(id);
+    const user = await usersService.getUserById(id); 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching user', error: error.message }); // Send the error message for better debugging
+    res.status(500).json({ message: 'Error fetching user', error: error.message });
   }
 };
-
 export const confirmUser = async (req, res) => {
   const { token } = req.params;
   console.log('Attempting to confirm user with token:', token); // Debugging line

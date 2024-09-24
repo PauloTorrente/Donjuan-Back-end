@@ -32,3 +32,7 @@ export async function register({ email, password, role }) {
 
   return user;
 }
+
+export const getUserById = async (id) => {
+  return await usersRepo.getById(id);
+};

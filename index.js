@@ -15,13 +15,16 @@ app.use(express.json());
 // Setting up routes
 app.use('/api', router);
 
+// Log the environment variables for debugging
+console.log('MONGO_URL:', process.env.MONGO_URL);
+console.log('MONGO_DB_NAME:', process.env.MONGO_DB_NAME);
+
 // Connect to MongoDB and start the server
 mongoose.connect(process.env.MONGO_URL, {
   dbName: process.env.MONGO_DB_NAME,
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds
-  socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 }).then(() => {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

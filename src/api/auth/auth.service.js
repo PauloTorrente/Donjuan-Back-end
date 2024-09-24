@@ -45,7 +45,7 @@ export const register = async (email, password, role) => {
   console.log('User successfully saved:', savedUser);
 
   // Send confirmation email in Spanish
-  const confirmationUrl = `https://donjuan-rzly.onrender.com/confirm/${confirmationToken}`;
+  const confirmationUrl = `https://donjuan-rzly.onrender.com/api/users/${confirmationToken}`;
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,

@@ -5,7 +5,7 @@ import transporter from '../../config/nodemailer.config.js';
 
 export async function register({ email, password, role }) {
   const confirmationToken = crypto.randomBytes(20).toString('hex');
-  const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = {
     email,
@@ -14,14 +14,12 @@ export async function register({ email, password, role }) {
     deleted: false,
     isConfirmed: false,
     confirmationToken,
-    createdAt: new Date(), // Ensure createdAt is set
+    createdAt: new Date(),
   };
 
-  // Save the new user
   const user = await usersRepo.create(newUser);
 
-  // Send confirmation email
-  const confirmationUrl = `https://donjuan-rzly.onrender.com/api/users/confirm/${confirmationToken}`; // Ensure the URL includes /api
+  const confirmationUrl = `https://donjuan-rzly.onrender.com/api/users/confirm/${confirmationToken}`;
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: email,
@@ -35,4 +33,8 @@ export async function register({ email, password, role }) {
 
 export const getUserById = async (id) => {
   return await usersRepo.getById(id);
+};
+
+export const updateUser = async (id, updatedData) => {
+  return await usersRepo.update(id, updatedData);
 };

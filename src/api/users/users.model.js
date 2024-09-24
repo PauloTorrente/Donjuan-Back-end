@@ -10,6 +10,7 @@ const userSchema = new Schema({
   wishList: [{ type: Schema.Types.ObjectId, ref: 'Clothes' }],
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date },
+  confirmationToken: { type: String },
 });
 
 const User = model('User', userSchema, 'accounts_db');

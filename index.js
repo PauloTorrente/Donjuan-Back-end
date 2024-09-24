@@ -3,8 +3,7 @@ dotenv.config();
 
 import express from 'express';
 import mongoose from 'mongoose';
-import router from './src/api/router.js';
-import './src/api/users/cleanup.js'; 
+import router from './src/api/router.js'; // This should include users.router
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // Setting up routes
-app.use('/api', router);
+app.use('/api', router); // Ensure '/api' prefix is applied to your routes
 
 // Log the environment variables for debugging
 console.log('MONGO_URL:', process.env.MONGO_URL);

@@ -19,6 +19,9 @@ export const register = async (email, password, role) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   console.log('Encrypted password:', hashedPassword);
 
+  // Generate a confirmation token
+  const confirmationToken = crypto.randomBytes(20).toString('hex');
+
   // Create the new user object
   const newUser = {
     email,
@@ -27,6 +30,7 @@ export const register = async (email, password, role) => {
     deleted: false,
     isConfirmed: false,
     createdAt: Date.now(),
+    confirmationToken, // Add confirmation token to user object
   };
 
   const user = new User(newUser);
@@ -41,13 +45,14 @@ export const register = async (email, password, role) => {
   console.log('User successfully saved:', savedUser);
 
   // Send confirmation email in Spanish
+  const confirmationUrl = `https://donjuan-rzly.onrender.com/confirm/${confirmationToken}`;
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
       subject: 'Confirma tu registro',
-      text: 'Por favor, confirma tu registro siguiendo este enlace.',
-      html: '<b>Por favor, confirma tu registro siguiendo este enlace.</b>',
+      text: `Por favor, confirma tu registro siguiendo este enlace: ${confirmationUrl}`,
+      html: `<b>Por favor, confirma tu registro siguiendo este enlace: <a href="${confirmationUrl}">${confirmationUrl}</a></b>`,
     });
     console.log('Correo de confirmación enviado a:', email);
   } catch (error) {
@@ -55,21 +60,6 @@ export const register = async (email, password, role) => {
   }
 
   return savedUser;
-};
-
-// Function to log in a user
-export const login = async (email, password) => {
-  console.log('Attempting to log in with email:', email);
-
-  const user = await User.findOne({ email });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    throw new Error('Credenciales inválidas');
-  }
-
-  const token = jwt.sign({ id: user._id, role: user.role }, process.env.AUTH_SECRET_KEY);
-  console.log('Token generado para el usuario:', token);
-
-  return token;
 };
 
 // Function to handle forgotten password
@@ -89,7 +79,7 @@ export const forgotPassword = async (email) => {
   await user.save();
 
   // Send password reset email in Spanish
-  const resetUrl = `http://localhost:3000/reset-password/${token}`;
+  const resetUrl = `https://donjuan-rzly.onrender.com/reset-password/${token}`;
 
   try {
     await transporter.sendMail({

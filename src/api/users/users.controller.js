@@ -1,10 +1,17 @@
 import * as usersService from './users.service.js';
 import User from '../users/users.model.js';
+import mongoose from 'mongoose';
 
 export const getUserById = async (req, res) => {
   const { id } = req.params;
+
+  // Check if the ID is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid ID format' });
+  }
+
   try {
-    const user = await usersService.getUserById(id); 
+    const user = await usersService.getUserById(id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -13,6 +20,7 @@ export const getUserById = async (req, res) => {
     res.status(500).json({ message: 'Error fetching user', error: error.message });
   }
 };
+
 export const confirmUser = async (req, res) => {
   const { token } = req.params;
   console.log('Attempting to confirm user with token:', token); // Debugging line

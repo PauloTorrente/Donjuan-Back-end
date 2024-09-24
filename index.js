@@ -6,6 +6,8 @@ import mongoose from 'mongoose';
 import router from './src/api/router.js'; // This should include users.router
 import cors from 'cors'; // Add CORS for cross-origin requests
 import helmet from 'helmet'; // Add Helmet for security
+import './src/api/users/cleanUnconfirmedUsers.js'; // cleanUnconfirmedUsers.js
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;

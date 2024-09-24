@@ -16,21 +16,24 @@ export const getUserById = async (req, res) => {
 
 export const confirmUser = async (req, res) => {
   const { token } = req.params;
+  console.log('Attempting to confirm user with token:', token); // Debugging line
 
-  try {
-    const user = await User.findOne({ confirmationToken: token });
-    if (!user) {
+  const user = await User.findOne({ confirmationToken: token });
+  if (!user) {
       return res.status(400).json({ message: 'Token inválido o expirado' });
-    }
-
-    user.isConfirmed = true;
-    user.confirmationToken = undefined; // Clear the token after confirmation
-    await user.save();
-
-    return res.status(200).json({ message: 'Usuario confirmado con éxito' });
-  } catch (error) {
-    return res.status(500).json({ message: 'Error confirming user', error });
   }
+
+  // Assuming you have a mechanism to check expiration
+  const isExpired = /* your logic to check if the token is expired */;
+  if (isExpired) {
+      return res.status(400).json({ message: 'El token ha expirado' });
+  }
+
+  user.isConfirmed = true;
+  user.confirmationToken = undefined; // Clear the token after confirmation
+  await user.save();
+
+  return res.status(200).json({ message: 'Usuario confirmado con éxito' });
 };
 
 export const updateUser = async (req, res) => {

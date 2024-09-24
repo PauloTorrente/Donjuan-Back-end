@@ -14,6 +14,7 @@ export async function register({ email, password, role }) {
     deleted: false,
     isConfirmed: false,
     confirmationToken,
+    createdAt: new Date(), // Ensure createdAt is set
   };
 
   // Save the new user

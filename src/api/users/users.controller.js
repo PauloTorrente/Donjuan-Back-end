@@ -10,7 +10,7 @@ export const getUserById = async (req, res) => {
     }
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching user', error });
+    res.status(500).json({ message: 'Error fetching user', error: error.message }); // Send the error message for better debugging
   }
 };
 
@@ -20,15 +20,15 @@ export const confirmUser = async (req, res) => {
 
   const user = await User.findOne({ confirmationToken: token });
   if (!user) {
-      return res.status(400).json({ message: 'Token inválido o expirado' });
+    return res.status(400).json({ message: 'Token inválido o expirado' });
   }
 
   // Check if the token is expired
   const expirationTime = 2 * 60 * 1000; // 2 minutes in milliseconds
   const isExpired = Date.now() - new Date(user.createdAt).getTime() > expirationTime;
-  
+
   if (isExpired) {
-      return res.status(400).json({ message: 'El token ha expirado' });
+    return res.status(400).json({ message: 'El token ha expirado' });
   }
 
   // Proceed with confirmation
@@ -49,6 +49,6 @@ export const updateUser = async (req, res) => {
     }
     res.json(updatedUser);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating user', error });
+    res.status(500).json({ message: 'Error updating user', error: error.message }); // Send the error message for better debugging
   }
 };

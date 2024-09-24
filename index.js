@@ -20,10 +20,13 @@ mongoose.connect(process.env.MONGO_URL, {
   dbName: process.env.MONGO_DB_NAME,
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds
+  socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 }).then(() => {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
 }).catch(err => {
   console.error('Database connection error:', err);
+  process.exit(1); // Exit the application in case of a database connection error
 });

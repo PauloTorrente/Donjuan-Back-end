@@ -4,12 +4,16 @@ dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
 import router from './src/api/router.js'; // This should include users.router
+import cors from 'cors'; // Add CORS for cross-origin requests
+import helmet from 'helmet'; // Add Helmet for security
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware to parse JSON requests
 app.use(express.json());
+app.use(cors()); // Enable CORS
+app.use(helmet()); // Use Helmet for security
 
 // Setting up routes
 app.use('/api', router); // Ensure '/api' prefix is applied to your routes

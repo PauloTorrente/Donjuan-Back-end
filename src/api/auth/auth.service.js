@@ -1,5 +1,6 @@
 import User from '../users/users.model.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'; // To generate JWT
 import transporter from '../../config/nodemailer.config.js';
 import crypto from 'crypto'; // For generating confirmation token
 
@@ -59,4 +60,36 @@ export const register = async (email, password, role) => {
   }
 
   return savedUser;
+};
+
+// Function to log in a user
+export const login = async (email, password) => {
+  console.log('Attempting to log in user with email:', email);
+
+  // Find the user by email
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new Error('Invalid credentials');
+  }
+
+  // Check if the user has confirmed their email
+  if (!user.isConfirmed) {
+    throw new Error('Please confirm your email before logging in');
+  }
+
+  // Compare the provided password with the stored hash
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new Error('Invalid credentials');
+  }
+
+  // Generate a JWT token
+  const token = jwt.sign(
+    { userId: user._id, email: user.email, role: user.role },
+    process.env.AUTH_SECRET_KEY,
+    { expiresIn: '1h' } // Token expires in 1 hour
+  );
+
+  console.log('Login successful, token generated:', token);
+  return token;
 };

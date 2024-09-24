@@ -15,12 +15,18 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
-  
+
   try {
     const token = await userService.login(email, password);
-    res.json({ token });
+
+    // If the service returns null, invalid credentials
+    if (!token) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    res.status(200).json({ token });
   } catch (error) {
     console.error('Error al iniciar sesión:', error); // Para debug
-    res.status(401).json({ message: 'Invalid credentials' });
+    res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };

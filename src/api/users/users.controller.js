@@ -23,12 +23,15 @@ export const confirmUser = async (req, res) => {
       return res.status(400).json({ message: 'Token inválido o expirado' });
   }
 
-  // Assuming you have a mechanism to check expiration
-  const isExpired = /* your logic to check if the token is expired */;
+  // Check if the token is expired
+  const expirationTime = 2 * 60 * 1000; // 2 minutes in milliseconds
+  const isExpired = Date.now() - new Date(user.createdAt).getTime() > expirationTime;
+  
   if (isExpired) {
       return res.status(400).json({ message: 'El token ha expirado' });
   }
 
+  // Proceed with confirmation
   user.isConfirmed = true;
   user.confirmationToken = undefined; // Clear the token after confirmation
   await user.save();

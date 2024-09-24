@@ -12,7 +12,7 @@ export const register = async (email, password, role) => {
   const existingUser = await User.findOne({ email });
   console.log('Existing user:', existingUser); // Log to check if user already exists
   if (existingUser) {
-    throw new Error('Email is already registered');
+    throw new Error('El email ya está registrado');
   }
 
   // Encrypt the password
@@ -35,23 +35,23 @@ export const register = async (email, password, role) => {
   // Save the user to the database
   const savedUser = await user.save().catch(error => {
     console.error('Error saving the user:', error);
-    throw new Error('Error registering the user');
+    throw new Error('Error registrando el usuario');
   });
 
   console.log('User successfully saved:', savedUser);
 
-  // Send confirmation email
+  // Send confirmation email in Spanish
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Confirm your registration',
-      text: 'Please confirm your registration by following this link.',
-      html: '<b>Please confirm your registration by following this link.</b>',
+      subject: 'Confirma tu registro',
+      text: 'Por favor, confirma tu registro siguiendo este enlace.',
+      html: '<b>Por favor, confirma tu registro siguiendo este enlace.</b>',
     });
-    console.log('Confirmation email sent to:', email);
+    console.log('Correo de confirmación enviado a:', email);
   } catch (error) {
-    console.error('Error sending confirmation email:', error);
+    console.error('Error al enviar el correo de confirmación:', error);
   }
 
   return savedUser;
@@ -63,11 +63,11 @@ export const login = async (email, password) => {
 
   const user = await User.findOne({ email });
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    throw new Error('Invalid credentials');
+    throw new Error('Credenciales inválidas');
   }
 
   const token = jwt.sign({ id: user._id, role: user.role }, process.env.AUTH_SECRET_KEY);
-  console.log('Token generated for user:', token);
+  console.log('Token generado para el usuario:', token);
 
   return token;
 };
@@ -76,7 +76,7 @@ export const login = async (email, password) => {
 export const forgotPassword = async (email) => {
   const user = await User.findOne({ email });
   if (!user) {
-    throw new Error('User not found');
+    throw new Error('Usuario no encontrado');
   }
 
   // Generate a password reset token
@@ -88,20 +88,20 @@ export const forgotPassword = async (email) => {
 
   await user.save();
 
-  // Send password reset email
+  // Send password reset email in Spanish
   const resetUrl = `http://localhost:3000/reset-password/${token}`;
 
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: user.email,
-      subject: 'Password Reset',
-      text: `You are receiving this because you requested a password reset. Please click the following link to reset your password: ${resetUrl}`,
-      html: `<p>You are receiving this because you requested a password reset.</p><p>Please click the following link to reset your password:</p><a href="${resetUrl}">${resetUrl}</a>`,
+      subject: 'Recuperación de Contraseña',
+      text: `Has solicitado una recuperación de contraseña. Por favor, haz clic en el siguiente enlace para restablecer tu contraseña: ${resetUrl}`,
+      html: `<p>Has solicitado una recuperación de contraseña.</p><p>Por favor, haz clic en el siguiente enlace para restablecer tu contraseña:</p><a href="${resetUrl}">${resetUrl}</a>`,
     });
-    return { message: 'Password recovery email sent' };
+    return { message: 'Correo de recuperación de contraseña enviado' };
   } catch (error) {
-    console.error('Error sending password recovery email:', error);
-    throw new Error('Error sending password recovery email');
+    console.error('Error al enviar el correo de recuperación:', error);
+    throw new Error('Error al enviar el correo de recuperación');
   }
 };

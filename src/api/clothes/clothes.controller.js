@@ -11,7 +11,7 @@ export const addClothes = async (req, res) => {
 };
 
 export const getClothesBySize = async (req, res) => {
-  const { size } = req.params;
+  const { size } = req.params; 
   try {
     const clothes = await clothesService.findClothesBySize(size);
     if (!clothes.length) {

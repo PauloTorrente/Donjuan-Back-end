@@ -5,6 +5,7 @@ const clothesSchema = new Schema({
   price: { type: Number, required: true },
   stock: { type: Boolean },
   color: { type: String },
+  piece: { type: String },
   brand: { type: String },
   sizes: [{ type: String }],
   imageUrl: { type: String },

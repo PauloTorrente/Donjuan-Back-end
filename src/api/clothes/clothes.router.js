@@ -4,19 +4,13 @@ import { protect } from '../../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
+// POST route to add clothes (protected)
 router.post('/', protect, addClothes);
-router.get('/sizes/:size', getClothesBySize);
-router.get('/clothes', async (req, res) => {
-    const piece = req.query.piece;
-    try {
-      const clothes = await Clothes.find(piece ? { piece } : {});
-      res.json(clothes);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  });
 
-// Use the getClothes controller function
+// GET route to fetch clothes by size
+router.get('/sizes/:size', getClothesBySize);
+
+// GET route to fetch all clothes or by piece (query param)
 router.get('/', getClothes);
 
 export default router;

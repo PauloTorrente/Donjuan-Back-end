@@ -7,7 +7,8 @@ export const addClothes = async (req, res) => {
     const newClothes = await clothesService.addClothes(clothesData);
     res.status(201).json(newClothes);
   } catch (error) {
-    res.status(500).json({ message: 'Error adding clothes', error });
+    console.error('Error adding clothes:', error);
+    res.status(500).json({ message: 'Error adding clothes', error: error.message });
   }
 };
 
@@ -21,17 +22,22 @@ export const getClothesBySize = async (req, res) => {
     }
     res.status(200).json(clothes);
   } catch (error) {
-    res.status(500).json({ message: 'Error retrieving clothes', error });
+    console.error('Error retrieving clothes by size:', error);
+    res.status(500).json({ message: 'Error retrieving clothes by size', error: error.message });
   }
 };
 
-// Function to get all clothes or by piece
+// Function to get all clothes or filter by piece
 export const getClothes = async (req, res) => {
   const { piece } = req.query;
   try {
     const clothes = await clothesService.findClothesByPiece(piece);
+    if (!clothes.length) {
+      return res.status(404).json({ message: 'No clothes found' });
+    }
     res.status(200).json(clothes);
   } catch (error) {
-    res.status(500).json({ message: 'Error retrieving clothes', error });
+    console.error('Error retrieving clothes:', error);
+    res.status(500).json({ message: 'Error retrieving clothes', error: error.message });
   }
 };

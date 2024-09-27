@@ -1,5 +1,5 @@
 import * as clothesRepository from './clothes.repository.js';
-
+import Clothes from './clothes.model.js'; 
 
 const transformRowUrl = (rowUrl) => {
   const splitedRowUrl = rowUrl.split('/');
@@ -17,4 +17,8 @@ export const addClothes = async (clothesData) => {
 
 export const findClothesBySize = async (size) => {
   return await clothesRepository.findBySize(size);
+};
+
+export const getAllClothes = async () => {
+  return await Clothes.find(); // Fetch all clothes
 };

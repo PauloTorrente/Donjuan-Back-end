@@ -1,4 +1,4 @@
-import * as clothesRepository from './clothes.repository.js';
+import * as clothesRepository from './clothes.repository.js'; 
 import Clothes from './clothes.model.js'; 
 
 const transformRowUrl = (rowUrl) => {
@@ -12,11 +12,11 @@ export const addClothes = async (clothesData) => {
   if (clothesData.imageUrl) {
     clothesData.imageUrl = transformRowUrl(clothesData.imageUrl);
   }
-  return await clothesRepository.create(clothesData);
+  return await clothesRepository.create(clothesData); // Using the repository
 };
 
 export const findClothesBySize = async (size) => {
-  return await clothesRepository.findBySize(size);
+  return await clothesRepository.findBySize(size); // Using the repository
 };
 
 export const getAllClothes = async () => {

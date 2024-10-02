@@ -3,11 +3,23 @@ import Clothes from './clothes.model.js';
 
 // Transform Google Drive URL to a thumbnail URL
 const transformRowUrl = (rowUrl) => {
-  const splitedRowUrl = rowUrl.split('/');
-  const imgId = splitedRowUrl[5];
-  return `https://drive.google.com/thumbnail?id=${imgId}&sz=w1000`;
-};
+  const regex = /\/d\/([a-zA-Z0-9_-]+)/; // Regex para el formato estándar
+  const match = rowUrl.match(regex);
+  
+  if (match) {
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`; // Usar el ID extraído
+  }
 
+  // Manejar el formato de vista
+  const viewRegex = /\/file\/d\/([a-zA-Z0-9_-]+)/; // Regex para el formato de vista
+  const viewMatch = rowUrl.match(viewRegex);
+  
+  if (viewMatch) {
+    return `https://drive.google.com/thumbnail?id=${viewMatch[1]}&sz=w1000`; // Usar el ID extraído
+  }
+
+  return null; // Retornar null si no se encuentra un ID válido
+};
 // Add new clothes
 export const addClothes = async (clothesData) => {
   if (clothesData.imageUrl) {
@@ -26,3 +38,4 @@ export const findClothesByPiece = async (piece) => {
   const query = piece ? { piece } : {};
   return await clothesRepository.find(query); // Fetch based on piece or all
 };
+//test

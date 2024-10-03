@@ -3,9 +3,7 @@ import Clothes from './clothes.model.js';
 
 // Add new clothes
 export const addClothes = async (clothesData) => {
-  if (clothesData.imageUrl) {
-    clothesData.imageUrl = transformRowUrl(clothesData.imageUrl);
-  }
+  // No se transforma la URL ya que ahora usamos URLs directas de Imgur
   return await clothesRepository.create(clothesData); // Delegate to repository
 };
 

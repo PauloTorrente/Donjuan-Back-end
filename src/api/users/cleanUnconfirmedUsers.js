@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import User from './users.model.js';
 
 cron.schedule('* * * * *', async () => {
-  const expirationTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+  const expirationTime = 30 * 60 * 1000; 
   const thresholdTime = Date.now() - expirationTime;
 
   try {

@@ -57,3 +57,31 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ message: 'Error updating user', error: error.message });
   }
 };
+
+// Add or remove item from wishlist
+export const updateWishlist = async (req, res) => {
+  const { userId, itemId } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const itemIndex = user.wishList.indexOf(itemId);
+
+    if (itemIndex > -1) {
+      // Item is already in the wishlist, remove it
+      user.wishList.splice(itemIndex, 1);
+    } else {
+      // Item is not in the wishlist, add it
+      user.wishList.push(itemId);
+    }
+
+    await user.save();
+    res.status(200).json({ message: 'Wishlist updated successfully', wishList: user.wishList });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating wishlist', error: error.message });
+  }
+};

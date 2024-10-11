@@ -4,18 +4,23 @@ import Clothes from '../clothes/clothes.model.js';  // Import clothes model
 
 // Function to get the wishlist by userId
 export const getWishlistByUserId = async (userId) => {
-  try {
-    // Find the user by their ID and populate the wishlist with items
-    const user = await User.findById(userId).populate('wishList');
-    if (!user) {
-      throw new Error('User not found');  // Throw an error if the user does not exist
+    try {
+      // Find the user by their ID and populate the wishlist with items
+      const user = await User.findById(userId).populate({
+        path: 'wishList', // Populate the wishList field
+        model: 'Clothes' // Specify the model to populate
+      });
+  
+      if (!user) {
+        throw new Error('User not found');  // Throw an error if the user does not exist
+      }
+  
+      return user.wishList;  // Return the populated wishlist
+    } catch (error) {
+      console.error('Error fetching wishlist:', error);  // Log any error
+      throw new Error('Could not fetch wishlist');  // Throw a descriptive error
     }
-    return user.wishList;  // Return the wishlist from the user object
-  } catch (error) {
-    console.error('Error fetching wishlist:', error);  // Log any error
-    throw new Error('Could not fetch wishlist');  // Throw a descriptive error
-  }
-};
+  };
 
 // Function to add an item to the wishlist
 export const addItemToWishlist = async (userId, itemId) => {

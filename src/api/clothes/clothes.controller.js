@@ -26,6 +26,23 @@ export const getClothesBySize = async (req, res) => {
     res.status(500).json({ message: 'Error retrieving clothes by size', error: error.message });
   }
 };
+// Function to update clothes
+export const updateClothes = async (req, res) => {
+  const { id } = req.params; // Get the id from the request parameters
+  const updateData = req.body; // Get the data to update
+
+  try {
+    const updatedClothes = await clothesService.updateClothes(id, updateData);
+    if (!updatedClothes) {
+      return res.status(404).json({ message: 'Clothing item not found' });
+    }
+    res.status(200).json(updatedClothes);
+  } catch (error) {
+    console.error('Error updating clothes:', error);
+    res.status(500).json({ message: 'Error updating clothes', error: error.message });
+  }
+};
+
 
 // Function to get all clothes or filter by piece
 export const getClothes = async (req, res) => {

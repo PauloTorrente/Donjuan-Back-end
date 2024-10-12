@@ -12,6 +12,11 @@ export const findClothesBySize = async (size) => {
   return await clothesRepository.findBySize(size); // Use repository for size
 };
 
+// Update clothes
+export const updateClothes = async (id, updateData) => {
+  return await Clothes.findByIdAndUpdate(id, updateData, { new: true }); // { new: true } returns the updated document
+};
+
 // Find clothes by piece or return all clothes
 export const findClothesByPiece = async (piece) => {
   const query = piece ? { piece } : {};

@@ -13,4 +13,6 @@ router.get('/sizes/:size', getClothesBySize);
 // GET route to fetch all clothes or by piece (query param)
 router.get('/', getClothes);
 
+router.patch('/:id', protect, updateClothes);
+
 export default router;

@@ -22,3 +22,8 @@ export const findClothesByPiece = async (piece) => {
   const query = piece ? { piece } : {};
   return await clothesRepository.find(query); // Fetch based on piece or all
 };
+
+// Find clothes by ID
+export const findById = async (id) => {
+  return await Clothes.findById(id); // Use Mongoose's findById method
+};

@@ -3,27 +3,32 @@ import Clothes from './clothes.model.js';
 
 // Add new clothes
 export const addClothes = async (clothesData) => {
-  // No se transforma la URL ya que ahora usamos URLs directas de Imgur
-  return await clothesRepository.create(clothesData); // Delegate to repository
+  if (clothesData.discount > 0) {
+    clothesData.price = clothesData.price - (clothesData.price * (clothesData.discount / 100));
+  }
+  return await clothesRepository.create(clothesData); 
 };
 
 // Find clothes by size
 export const findClothesBySize = async (size) => {
-  return await clothesRepository.findBySize(size); // Use repository for size
+  return await clothesRepository.findBySize(size); 
 };
 
 // Update clothes
 export const updateClothes = async (id, updateData) => {
-  return await Clothes.findByIdAndUpdate(id, updateData, { new: true }); // { new: true } returns the updated document
+  if (updateData.discount > 0) {
+    updateData.price = updateData.price - (updateData.price * (updateData.discount / 100));
+  }
+  return await Clothes.findByIdAndUpdate(id, updateData, { new: true }); 
 };
 
 // Find clothes by piece or return all clothes
 export const findClothesByPiece = async (piece) => {
   const query = piece ? { piece } : {};
-  return await clothesRepository.find(query); // Fetch based on piece or all
+  return await clothesRepository.find(query); 
 };
 
 // Find clothes by ID
 export const findById = async (id) => {
-  return await Clothes.findById(id); // Use Mongoose's findById method
+  return await Clothes.findById(id); 
 };

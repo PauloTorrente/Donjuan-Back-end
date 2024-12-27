@@ -1,5 +1,5 @@
 import express from 'express';
-import { addClothes, getClothesBySize, getClothes, updateClothes, getClothesById } from './clothes.controller.js'; // Import the new function
+import { addClothes, getClothesBySize, getClothes, updateClothes, getClothesById } from './clothes.controller.js';
 import { protect } from '../../middlewares/auth.middleware.js';
 
 const router = express.Router();

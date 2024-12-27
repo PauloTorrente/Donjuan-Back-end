@@ -9,6 +9,7 @@ const clothesSchema = new Schema({
   brand: { type: String },
   sizes: [{ type: String }],
   imageUrl: { type: String },
+  discount: { type: Number, default: 0 },
 });
 
 const Clothes = model('Clothes', clothesSchema, 'clothes_db');
